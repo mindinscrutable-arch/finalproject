@@ -6,3 +6,4 @@ pydantic-settings
 openai
 anthropic
 pytest
+boto3

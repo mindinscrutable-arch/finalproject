@@ -6,6 +6,8 @@ from app.aws.s3 import S3Helper
 
 logger = logging.getLogger(__name__)
 
+from app.core.config import settings
+
 class StorageService:
     """
     High-level service class for persisting migration records and execution results to S3.
@@ -15,8 +17,8 @@ class StorageService:
     def __init__(self):
         self.s3_helper = S3Helper()
         # Default bucket name; preferably overridden by Person A in config.py's settings
-        self.bucket_name = os.getenv("S3_STORAGE_BUCKET", "llm-migration-reports-bucket")
-        self.enabled = os.getenv("AWS_STORAGE_ENABLED", "false").lower() == "true"
+        self.bucket_name = getattr(settings, "S3_STORAGE_BUCKET", "llm-migration-reports-bucket")
+        self.enabled = getattr(settings, "AWS_STORAGE_ENABLED", False)
         
     def save_comparison_result(self, comparison_data: Dict[str, Any]) -> str:
         """

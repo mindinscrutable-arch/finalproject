@@ -8,6 +8,8 @@ from app.aws.dynamodb import DynamoDBHelper
 
 logger = logging.getLogger(__name__)
 
+from app.core.config import settings
+
 class JobHistoryService:
     """
     High-level service class for persisting "Job History" to DynamoDB.
@@ -16,8 +18,8 @@ class JobHistoryService:
     
     def __init__(self):
         self.db_helper = DynamoDBHelper()
-        self.table_name = os.getenv("DYNAMODB_JOBS_TABLE", "MigrationJobs")
-        self.enabled = os.getenv("AWS_STORAGE_ENABLED", "false").lower() == "true"
+        self.table_name = getattr(settings, "DYNAMODB_JOBS_TABLE", "MigrationJobs")
+        self.enabled = getattr(settings, "AWS_STORAGE_ENABLED", False)
         
     def create_job(self, source_provider: str, model_id: str, submitted_by: str = "anonymous") -> str:
         """
@@ -56,6 +58,8 @@ class JobHistoryService:
             logger.info(f"[Storage Disabled] Mock completed job {job_id}")
             return True
         
+        from decimal import Decimal
+        
         try:
             table = self.db_helper.resource.Table(self.table_name)
             table.update_item(
@@ -65,7 +69,7 @@ class JobHistoryService:
                 ExpressionAttributeValues={
                     ":s": "COMPLETED",
                     ":r": report_s3_key,
-                    ":c": cost_savings_pct,
+                    ":c": Decimal(str(cost_savings_pct)),
                     ":t": datetime.now(timezone.utc).isoformat()
                 }
             )

@@ -9,6 +9,11 @@ class Settings(BaseSettings):
     DYNAMODB_JOBS_TABLE: str | None = None
     AWS_STORAGE_ENABLED: bool = False
     
+    # AWS Credentials
+    AWS_REGION: str | None = "us-east-1"
+    AWS_ACCESS_KEY_ID: str | None = None
+    AWS_SECRET_ACCESS_KEY: str | None = None
+    
     OPENAI_API_KEY: str | None = None
     OPENAI_BASE_URL: str | None = None
     NVIDIA_API_KEY: str | None = None
