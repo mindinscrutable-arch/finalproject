@@ -12,22 +12,25 @@ class OpenAIClient:
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         if self.api_key:
-            self.client = AsyncOpenAI(api_key=self.api_key)
+            self.client = AsyncOpenAI(
+                api_key=self.api_key,
+                base_url="https://api.x.ai/v1"
+            )
         else:
             self.client = None
 
     async def generate_chat_response(
         self,
         messages: List[Dict[str, Any]],
-        model_id: str = "gpt-4o",
+        model_id: str = "grok-beta",
         temperature: float = 0.7,
         max_tokens: int = 1000,
     ) -> Dict[str, Any]:
         """
-        Invokes OpenAI Chat Completions API and returns the parsed response.
-        Restricts the source model specifically to the list of allowed models.
+        Invokes xAI (Grok) Chat Completions API and returns the parsed response.
+        Restricts the source model specifically to the list of allowed Grok models.
         """
-        allowed_models = ["gpt-4o", "gpt-4.1", "gpt-4-turbo"]
+        allowed_models = ["grok-beta", "grok-2", "grok-2-mini", "grok-2-latest"]
         if model_id not in allowed_models:
             raise ValueError(f"Unsupported source model '{model_id}'. Allowed models are: {allowed_models}")
         if not self.client:
