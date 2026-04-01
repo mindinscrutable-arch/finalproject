@@ -56,8 +56,23 @@ export const executeComparison = async ({ translatedPrompt, targetModel }) => {
     return new Promise(resolve => setTimeout(() => resolve({
       data: {
         latency: 1240,
-        sourceOutput: "This is a streamed simulation response from your selected OpenAI source model.",
-        targetOutput: "This is a simulated execution from Amazon Bedrock returning via the dual-invoke execution engine."
+        sourceOutput: "This is a streamed simulation response from your selected OpenAI source model. In a live environment, this will stream the actual tokens from OpenAI.",
+        targetOutput: "This is a simulated execution from Amazon Bedrock returning via the dual-invoke execution engine. Look closely: the payload structure was successfully converted!",
+        metrics: {
+          qualityScore: "98.4",
+          sourceQuality: "96.1",
+          latencyDiff: "-0.4s",
+          sourceLatency: "1.6s",
+          targetLatency: "1.2s",
+          tokenDiff: "-18%",
+          sourceTokens: "381",
+          targetTokens: "312",
+          savingsAmount: "$4,200",
+          sourceCost: "$10,000/mo",
+          targetCost: "$5,800/mo",
+          verdict: "SAFE TO MIGRATE",
+          confidence: "96%"
+        }
       }
     }), 3000));
   }

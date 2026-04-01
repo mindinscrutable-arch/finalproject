@@ -3,6 +3,7 @@ import { useMigrationDemo } from '../hooks/useMigrationDemo';
 import PromptInput from '../components/upload/PromptInput';
 import TranslationDiff from '../components/translate/TranslationDiff';
 import ExecutionPanel from '../components/compare/ExecutionPanel';
+import MigrationReport from '../components/report/MigrationReport';
 import { translatePrompt, executeComparison, saveComparisonMetrics } from '../services/apiClient';
 
 export default function LandingPage() {
@@ -206,6 +207,9 @@ export default function LandingPage() {
         </div>
 
       </section>
+
+      {/* DYNAMIC POST-EXECUTION METRICS REPORT */}
+      <MigrationReport metrics={executionResult?.metrics} />
 
       {/* FOOTER */}
       <footer>
