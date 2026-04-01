@@ -1,0 +1,8 @@
+requests
+fastapi
+uvicorn
+pydantic
+pydantic-settings
+openai
+anthropic
+pytest

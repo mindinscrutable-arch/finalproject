@@ -1,0 +1,1 @@
+export default function PageHeader() { return <header>Header</header>; }
