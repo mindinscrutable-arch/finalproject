@@ -208,7 +208,7 @@ export default function LandingPage() {
       </section>
 
       {/* DYNAMIC POST-EXECUTION METRICS REPORT */}
-      <MigrationReport metrics={executionResult?.metrics} />
+      <MigrationReport metrics={executionResult?.metrics} sourceModel={sourceModel} targetModel={targetModel} />
 
       {/* FOOTER */}
       <footer>

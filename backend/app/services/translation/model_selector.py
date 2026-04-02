@@ -50,11 +50,11 @@ Reply strictly in valid JSON format with your chosen model and your reason why y
 
         # Perform the LLM inference directly to dynamically generate the decision!
         try:
-            url = "https://integrate.api.nvidia.com/v1/chat/completions"
-            api_key = getattr(settings, "NVIDIA_API_KEY", "")
+            url = "https://api.groq.com/openai/v1/chat/completions"
+            api_key = getattr(settings, "GROQ_API_KEY", "")
             
             payload = {
-                "model": "meta/llama3-70b-instruct",
+                "model": "llama-3.1-8b-instant",
                 "messages": [{"role": "user", "content": routing_prompt}],
                 "max_tokens": 150,
                 "temperature": 0.1
@@ -77,6 +77,9 @@ Reply strictly in valid JSON format with your chosen model and your reason why y
                             "target_model": ai_decision["target_model"],
                             "selection_reason": f"AI ROUTER DECISION: {ai_decision.get('selection_reason', 'dynamically selected.')}"
                         }
+            else:
+                logger.warning(f"Groq API error in router: {response.text}")
+                
         except Exception as e:
             logger.warning(f"AI Router fell back to heuristic parsing: {e}")
             

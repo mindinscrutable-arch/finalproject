@@ -3,16 +3,22 @@ from openai import AsyncOpenAI
 from app.core.config import settings
 import time
 
-# Safely instantiate pointing directly to Groq's high-speed inference engine!
-client = AsyncOpenAI(
-    api_key=settings.GROQ_API_KEY,
-    base_url=settings.GROQ_BASE_URL
-)
+_client = None
+
+def get_groq_client():
+    global _client
+    if _client is None:
+        _client = AsyncOpenAI(
+            api_key=settings.GROQ_API_KEY,
+            base_url=settings.GROQ_BASE_URL
+        )
+    return _client
 
 async def invoke_source_model(source_model: str, payload_str: str) -> dict:
     """
     Ping the Groq API natively! The LLaMA 3 models will execute this payload at 800 tokens/sec.
     """
+    client = get_groq_client()
     try:
         parsed_payload = json.loads(payload_str)
         if isinstance(parsed_payload, list):

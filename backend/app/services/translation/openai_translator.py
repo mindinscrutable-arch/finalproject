@@ -15,10 +15,20 @@ class OpenAITranslator:
         system_prompt = ""
         user_messages = []
         
+        # If payload doesn't have 'messages' array (e.g., raw JSON input), wrap the entire payload!
+        if not messages and payload:
+            import json
+            # Filter out known config keys if they exist so we just pass the raw input
+            filtered_payload = {k: v for k, v in payload.items() if k not in ["temperature", "max_tokens", "top_p", "response_format"]}
+            if filtered_payload:
+                messages = [{"role": "user", "content": json.dumps(filtered_payload, indent=2)}]
+            else:
+                messages = [{"role": "user", "content": json.dumps(payload, indent=2)}]
+        
         # 1. Separate System messages from other roles (User/Assistant)
         for msg in messages:
-            role = msg.get("role", "")
-            content = msg.get("content", "")
+            role = msg.get("role", "user")
+            content = msg.get("content", str(msg))
             
             if role == "system":
                 # Aggregate system messages if there are multiple (not common but possible)
